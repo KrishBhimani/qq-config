@@ -62,6 +62,7 @@ validate on every PR.
 | Project | Kinds | Required check |
 | --- | --- | --- |
 | [qq-sandbox](https://github.com/KrishBhimani/qq-sandbox) | pytest | `qq-sandbox-presubmit` |
+| [argus-code](https://github.com/KrishBhimani/argus-code) | uv-pytest | `argus-code-presubmit` |
 
 ## Known limits (2026-10-07)
 

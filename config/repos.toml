@@ -20,3 +20,14 @@ kinds = ["pytest"]
 manifest = "infra/repo.toml"
 channels = []
 owners = []
+
+[[repo]]
+name = "argus-code"
+source = "github.com/krishbhimani/argus-code"
+description = "Local-first observability for Claude Code and Codex."
+visibility = "public"
+default_branch = "main"
+kinds = ["uv-pytest"]
+manifest = "infra/repo.toml"
+channels = []
+owners = []
