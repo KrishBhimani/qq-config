@@ -1,0 +1,22 @@
+# The registry of onboarded repos. Onboarding a repo means adding one [[repo]] block here, plus
+# the repo's own infra/repo.toml once `sync` exists. Facts were read from the repos on 2026-10-03.
+# Settled: public repos only for now (both repos below clone anonymously).
+
+[area]
+name = "repos"
+status = "seed"
+schema = "v0"
+owners = []            # suraj fills in
+read_by = ["gate", "gardener", "release", "rollers"]
+chromium = "projects and refs declared in infra/config (lucicfg)"
+
+[[repo]]
+name = "qq-sandbox"
+source = "github.com/krishbhimani/qq-sandbox"
+description = "A personal sandbox for learning quirq infra onboarding."
+visibility = "public"
+default_branch = "main"
+kinds = ["pytest"]
+manifest = "infra/repo.toml"
+channels = []
+owners = []

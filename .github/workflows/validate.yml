@@ -1,0 +1,32 @@
+# Every change to this config is checked by quirq's infra-config code, at the commit in
+# infra-config.commit, before it lands: schemas, cross-references, policy, and generated files in sync.
+name: validate
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          path: qq-config
+          persist-credentials: false
+      - name: check out quirq-ai/infra-config at the pinned commit
+        run: |
+          commit=$(tr -d '[:space:]' < qq-config/infra-config.commit)
+          git init -q infra-config
+          git -C infra-config fetch -q --depth=1 https://github.com/quirq-ai/infra-config "$commit"
+          git -C infra-config checkout -q --detach FETCH_HEAD
+          test "$(git -C infra-config rev-parse HEAD)" = "$commit"
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.14"
+      - name: install infra-config's pinned requirements
+        run: python -m pip install --quiet --require-hashes -r infra-config/requirements.txt
+      - name: qqcfg validate
+        run: python infra-config/tools/qqcfg.py validate --root qq-config

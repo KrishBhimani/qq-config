@@ -1,0 +1,16 @@
+# Benchmarks on main with alert thresholds (plan §3 P7). STUB: nothing runs until P6.
+
+[area]
+name = "perf"
+status = "stub"
+schema = "v0"
+owners = []            # suraj fills in
+read_by = ["perf (P6)"]
+chromium = "chrome.perf waterfall, perf dashboard alerts, Pinpoint bisection"
+
+[[benchmark]]
+name = "qq-sandbox-placeholder"   # placeholder: the schema needs one; point it at a real project
+repo = "qq-sandbox"
+measure = "seconds to run the test suite"
+alert_regression_pct = 10
+# TODO(expert): benchmark hardware, noise control, and how alerts reach bisection.
