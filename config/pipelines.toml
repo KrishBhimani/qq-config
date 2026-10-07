@@ -59,3 +59,26 @@ capabilities = ["fetch", "test"]
 pool = "trusted"
 cancel_in_progress = false
 generate = true
+
+[[builder]]
+name = "argus-code-presubmit"
+repo = "argus-code"
+pipeline = "presubmit"
+triggers = ["change", "queue"]
+kinds = ["uv-pytest"]
+capabilities = ["fetch", "test"]
+pool = "untrusted"
+blocking = true
+timeout_minutes = 15
+generate = true
+
+[[builder]]
+name = "argus-code-postsubmit"
+repo = "argus-code"
+pipeline = "postsubmit"
+triggers = ["land"]
+kinds = ["uv-pytest"]
+capabilities = ["fetch", "test"]
+pool = "trusted"
+cancel_in_progress = false
+generate = true
