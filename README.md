@@ -6,34 +6,36 @@ lands. This repo holds **data only**. The code that reads it (`qqcfg`, the schem
 `infra-config.commit`, so my config is checked by quirq's own rules.
 
 ```
-config/        the 13 areas (org, repos, pipelines, gate, kinds, ...), edited by hand
-generated/     workflows written by `qqcfg generate`; never edit these
+config/               the 13 areas (org, repos, pipelines, gate, kinds, ...), edited by hand
+generated/            workflows written by `qq cfg generate`; never edit these
 infra-config.commit   the quirq-ai/infra-config commit that validates this config
+infra/repo.toml       makes this a qq repo (pinned Python)
+infra/commands/cfg.sh `qq cfg ...`: runs quirq's qqcfg on this config
 ```
 
 ## Setup (once)
 
-Keep quirq's infra-config next to this repo, at the pinned commit, and give `qqcfg` its own venv
-(it needs `jsonschema` and `pyyaml`, installed at the versions infra-config pins):
+You need [depot](https://github.com/quirq-ai/depot)'s `qq` on `PATH`. Then:
 
 ```sh
-git clone https://github.com/quirq-ai/infra-config
-git -C infra-config checkout $(cat qq-config/infra-config.commit)
-python3 -m venv .venv-qqcfg
-source .venv-qqcfg/bin/activate
-pip install -r infra-config/requirements.txt
+git clone https://github.com/KrishBhimani/qq-config
+cd qq-config
+qq sync
 ```
 
-Activate it (`source .venv-qqcfg/bin/activate`) in each new terminal before running `qqcfg`.
+The first `qq cfg` clones quirq-ai/infra-config to `../infra-config` if it is not there (or set
+`QQ_INFRA_CONFIG`), and makes `.venv-qqcfg` from the pinned Python with infra-config's pinned
+requirements. It refuses to run if `../infra-config` is not at the commit in `infra-config.commit`,
+and says how to fix that.
 
 ## Every change
 
-Edit `config/`, then from the directory holding both repos:
+Edit `config/`, then:
 
 ```sh
-python3 infra-config/tools/qqcfg.py validate --root qq-config
-python3 infra-config/tools/qqcfg.py generate --root qq-config
-python3 infra-config/tools/qqcfg.py validate --root qq-config
+qq cfg validate
+qq cfg generate
+qq cfg validate
 ```
 
 Commit `config/` and `generated/` together. CI (`.github/workflows/validate.yml`) runs the same
@@ -49,7 +51,7 @@ validate on every PR.
 4. Validate and generate (above), then deliver the workflows into the project and commit them there:
 
    ```sh
-   python3 infra-config/tools/qqcfg.py deliver <name> path/to/<name> --root qq-config
+   qq cfg deliver <name> ../<name>
    ```
 
 5. Make GitHub enforce the check: a ruleset on the project's default branch requiring
