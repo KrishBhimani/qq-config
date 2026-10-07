@@ -13,13 +13,18 @@ infra-config.commit   the quirq-ai/infra-config commit that validates this confi
 
 ## Setup (once)
 
-Keep quirq's infra-config next to this repo, at the pinned commit:
+Keep quirq's infra-config next to this repo, at the pinned commit, and give `qqcfg` its own venv
+(it needs `jsonschema` and `pyyaml`, installed at the versions infra-config pins):
 
 ```sh
 git clone https://github.com/quirq-ai/infra-config
 git -C infra-config checkout $(cat qq-config/infra-config.commit)
-python3 -m pip install -r infra-config/requirements.in
+python3 -m venv .venv-qqcfg
+source .venv-qqcfg/bin/activate
+pip install -r infra-config/requirements.txt
 ```
+
+Activate it (`source .venv-qqcfg/bin/activate`) in each new terminal before running `qqcfg`.
 
 ## Every change
 
